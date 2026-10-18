@@ -1,6 +1,6 @@
 ---
 name: maru-agent
-description: Build and refine audio plugins, instruments, effects and MIDI tools, sample kits and sampler banks, generate audio, and transcribe audio to MIDI with the Maru CLI (`maru`). Use for synths, VST/AU/CLAP plugins, drum kits, samplers, presets, DSP, audio generation and audio-to-MIDI tasks.
+description: Make instruments, effects, music and MIDI tools, sample kits and sampler banks with Maru. Use for Maru projects, DSP, plugin interfaces, musical-data code with Symbolic, audio generation and audio-to-MIDI.
 ---
 
 # Maru
@@ -57,14 +57,21 @@ generated project's `AGENTS.md` and README, inspect its package scripts, and
 install dependencies with the project's package manager. Scaffolding alone
 does not install them; `--install` opts in.
 
-Read the module guides before editing:
+Choose guidance by the user's goal; read only what the task needs using
+`maru guide read <name...>`:
 
-```sh
-maru guide read cli-and-operations processor-authoring parameters-and-schema ui-kit-faces build-preview-export
-```
+| Goal                                               | Guidance                                                                                                            |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Build or change an instrument or effect            | `processor-authoring`, `parameters-and-schema`; `ui-kit-faces` for controls, `build-preview-export` for delivery    |
+| Build a MIDI processor or sequencer                | `midi-and-event-modules`, plus the module guides for the parts being changed                                        |
+| Work with notes, chords, scales or rhythms in code | [Symbolic library guide](https://maruaudio.com/docs/symbolic-library); check the installed package's public exports |
+| Make sounds, kits or sampler banks                 | `sample-kits-and-banks`, `generation-and-transcription`; `assets-and-resources` when loading samples into a module  |
+| Generate audio or transcribe a recording           | `generation-and-transcription`                                                                                      |
 
-Use `maru guide list` to find additional guides for MIDI, presets, resources,
-sample kits, banks or generation as the task needs them.
+Music theory explanations can be answered directly. Musical-data scripts use
+Symbolic without scaffolding an audio module or starting its workbench. Read
+`cli-and-operations` for command conventions and `maru guide list` for other
+available guides, including presets and saved state.
 
 - Keep the declaration, parameter contract, Processor, face and presets in
   the generated project. Use its public `maruaudio/*` imports and shared

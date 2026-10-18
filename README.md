@@ -1,15 +1,9 @@
-# Maru agent skill
+# Maru
 
 ![Maru Audio — instruments, effects and musical tools](./MARU_audio.webp)
 
-A skill that teaches coding agents (Claude Code, Codex, Cursor and others) to
-build audio plugins, instruments, effects, MIDI tools, sample kits and banks,
-and to generate audio or transcribe it to MIDI, using the
-[Maru](https://maruaudio.com) CLI.
-
-The skill is deliberately small. It tells the agent to ask the installed `maru`
-CLI for commands, schemas and guides, so the agent always sees the features of
-the version you have installed.
+Make instruments, effects and musical tools with your coding agent.
+Works with Claude Code, Codex, Cursor and other agents.
 
 ## Install
 
@@ -17,78 +11,8 @@ the version you have installed.
 npx maruaudio skill install
 ```
 
-Or directly with the Skills CLI:
-
-```sh
-npx skills add maru-audio/maru-skill --skill maru-agent
-```
-
-Add `--global` to install for your user instead of the current project, or
-`--agent claude-code` to choose an agent. No sign-in is needed.
-
-## Create your first project
-
-Install the CLI globally, or use `npx maruaudio` in place of `maru`:
-
-```sh
-npm i -g maruaudio
-maru doctor
-maru init my-effect --kind processor-effect
-cd my-effect
-npm install
-npm run dev
-```
-
-Choose `processor-instrument` for a MIDI instrument. `maru init --help`
-lists the available templates. Each project includes source, a face, agent
-instructions and scripts for development and builds.
-
-Ask your agent to refine the project, then check and build the target you need:
-
-```sh
-npm run typecheck
-npm run module:check
-npm run check:portability
-npm run build:vst3
-npm run verify:formats
-```
-
-The live workbench lets you audition changes. Native builds need the platform
-toolchain and validators reported by the CLI; check the build report before
-calling a format verified. Maru is in alpha, and target availability depends
-on the module and installed tools.
-
-## Discover the CLI
-
-```sh
-maru --help
-maru guide list
-maru guide read cli-and-operations build-preview-export
-maru tools list
-maru tools describe validate_module
-```
-
-The installed CLI supplies operation schemas and task-specific guides for
-DSP, faces, MIDI, presets, sample kits, banks, generation and transcription.
-`maru mcp` exposes the same operations to agents that support MCP.
-The [skill instructions](./skills/maru-agent/SKILL.md) explain how agents
-use this discovery workflow.
-
-## Manage
-
-```sh
-npx maruaudio skill status   # installed? where, and for which agents
-npx maruaudio skill update   # fetch the latest version
-npx maruaudio skill remove   # uninstall (asks first; --yes to skip)
-```
-
-## Requirements
-
-- Node.js 22.12 or later and the Maru CLI: `npm i -g maruaudio`, or let the
-  agent use `npx maruaudio`.
-- Some features need more, such as `maru login` for hosted generation. Run
-  `maru doctor` to see what this machine can do and the command that fixes
-  each missing prerequisite.
+Then describe what you want to make. Your agent handles setup and finds the
+right Maru tools for the job.
 
 ## Try it
 
@@ -97,7 +21,51 @@ Ask your agent, for example:
 - "Make a tape-saturation effect with drive and tone controls."
 - "Build a 16-pad drum kit from this loop."
 - "Turn this melody recording into MIDI."
+- "Build a chord progression tool with scales and rhythm patterns."
 - "Add a preset bank to my synth."
+
+## What you can make
+
+| Area                    | Examples                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| Instruments and effects | Synths, audio effects, controls and presets                  |
+| Music and MIDI          | Chords, scales, rhythms, sequencers and note transformations |
+| Sounds and samples      | Generated sounds, drum kits, sampler banks and audio-to-MIDI |
+
+One skill covers these workflows and reads the relevant guides as needed.
+Music and MIDI code uses [Symbolic](https://maruaudio.com/symbolic), included
+in Maru.
+
+## Use the CLI directly
+
+```sh
+npx maruaudio init my-effect --kind processor-effect --install
+cd my-effect
+npm run dev
+```
+
+Edit your project and hear the changes in the live workbench. The generated
+project includes instructions and scripts for checking and building it:
+
+```sh
+npm test
+npm run build:vst3
+```
+
+Ask your agent to build and verify the format you need. Run
+`npx maruaudio doctor` if something needs setup.
+
+## Update
+
+```sh
+npx maruaudio skill update
+```
+
+For a user-wide install, add `--global`. To choose an agent, add
+`--agent claude-code` or `--agent codex` to the install command.
+
+You can also install directly with `npx skills add maru-audio/maru-skill`.
+The installer currently identifies the skill as `maru-agent`.
 
 ## Links
 
@@ -106,6 +74,8 @@ Ask your agent, for example:
 - [Maru on GitHub](https://github.com/maru-audio/MARU)
 - [Issues](https://github.com/maru-audio/maru-skill/issues)
 - [Contact](https://maruaudio.com/contact)
+
+Maru is in alpha. Some workflows need sign-in or additional build tools.
 
 ## License
 
