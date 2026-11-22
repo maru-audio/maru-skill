@@ -1,0 +1,15 @@
+{
+  "name": "maru-audio",
+  "owner": {
+    "name": "Maru Audio",
+    "url": "https://maru.audio"
+  },
+  "description": "Maru's agent plugin: the Maru skills and the hosted and local Maru MCP servers.",
+  "plugins": [
+    {
+      "name": "maru",
+      "source": "./",
+      "description": "Make instruments, effects and sounds with Maru: the Maru agent skill, the hosted Maru connector for your account, the local Maru server for a module checkout, and skills to start a synth, find a community module to fork, check a plug-in build and list a plug-in on the Maru marketplace."
+    }
+  ]
+}
