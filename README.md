@@ -19,6 +19,9 @@ The Maru skill connects the agent you already use to this ecosystem. It helps
 the agent choose the right tools, work with your project and check the result.
 Works with Claude Code, Codex, Cursor and other coding agents.
 
+Start at [Connect Maru](https://maru.audio/mcp) to set up the skills and MCP
+servers for your coding agent. For the entry skill alone:
+
 ```sh
 npx maruaudio skill install
 ```
@@ -62,18 +65,31 @@ install it from **Plugins** once the marketplace is added.
 | `find-module` skill | Finds a community module, explains its source and forks it with your OK |
 | `check-build` skill | Reports your plug-in builds and why the latest one failed |
 | `list-on-marketplace` skill | Lists your plug-in on the Maru marketplace, built with any framework: listing, media, offer and release, confirmed with you before it goes to review |
+| `create-module` skill | Starts an instrument, effect or other module from your brief and clarifies missing consequential choices |
+| `add-parameter` skill | Adds one control through the schema, the sound, the face and presets, and measures that it works |
+| `verify-module` skill | Checks a module with Maru's release checks, offline renders, a face screenshot and native builds, and reports any gaps |
+| `debug-toolchain` skill | Finds why a command, sign-in, MCP server, build or workbench is not working, and fixes the cause |
+| `build-for-hardware` skill | Guides module device builds, native firmware forks and controller apps using the exact device and installed tools; separates mocks, physical tests, publication and installation |
+| `list-plugin` skill | Chooses with you how a plug-in goes on Maru and confirms its name, price and licence before review |
 | `maru` server | The hosted connector at `https://maru.audio/mcp`: your Maru account, after you sign in to Maru and approve the connection in your browser |
 | `maru-local` server | Runs the published `maruaudio` package from npm on your computer (`npx maruaudio mcp`, pinned to a published release) for the module project in your folder |
 
 Ask in your own words, or pick a skill yourself: type `/maru:new-synth` in
 Claude Code, or type `@` in Codex and choose Maru.
 
+`maru-agent` is the entry point and hands each of these jobs to its workflow
+skill. `npx maruaudio skill install` installs `maru-agent` alone; an agent
+without the plugin reads a workflow skill from `skills/<name>/SKILL.md` in
+this repository. Each skill ends a reply with a `MARU FEEDBACK` line when
+Maru made part of the job harder than it should; you can send it to Maru as
+an [issue](https://github.com/maru-audio/maru-skill/issues).
+
 The hosted server talks only to maru.audio, as the account you approve. The
 local server runs Maru's command-line operations on your folder; the ones
 that need your account, such as audio jobs, reach maru.audio after
-`maru login`. See the [privacy policy](https://maru.audio/privacy). If you already added Maru
-with `npx maruaudio mcp install`, remove those entries so the tools are not
-listed twice.
+`maru login`. See the [privacy policy](https://maru.audio/privacy). If you already added Maru,
+check the existing server scopes before installing another copy. Keep the working
+connection and resolve conflicting entries without exposing or replacing its credentials.
 
 In Claude, ChatGPT and other chat apps, add the hosted connector instead:
 [connect your agent](https://maru.audio/docs/mcp-connect).

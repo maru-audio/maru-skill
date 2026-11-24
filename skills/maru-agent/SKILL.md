@@ -1,6 +1,6 @@
 ---
 name: maru-agent
-description: Make instruments, effects, music and MIDI tools, sample kits and sampler banks with Maru. Use for Maru projects, DSP, plugin interfaces, musical-data code with Symbolic, audio generation and audio-to-MIDI, and for listing a plugin built with JUCE, iPlug2 or any other framework on the Maru marketplace: its page, media, offer and releases (uploaded, linked to the maker's download page, or from GitHub releases).
+description: "Make instruments, effects, music and MIDI tools, sample kits and sampler banks with Maru. Use for Maru projects, DSP, plugin interfaces, device builds, firmware source forks, controller apps, musical-data code with Symbolic, audio generation and audio-to-MIDI, and for listing a plugin built with JUCE, iPlug2 or any other framework on the Maru marketplace: its page, media, offer and releases (uploaded, linked to the maker's download page, or from GitHub releases)."
 ---
 
 # Maru
@@ -24,14 +24,33 @@ The CLI, `maru`, supplies commands, options, schemas and guides for the
 installed version. Discover those interfaces rather than relying on memory
 or treating this file as an API reference.
 
+## Workflow skills
+
+This skill is the entry point. For these jobs, use the focused skill, which
+has its own steps, rules, checks and report:
+
+| Job | Skill |
+| --- | --- |
+| Start a new instrument, effect, MIDI tool, sampler or sequencer | `create-module`: uses the brief's kind, formats and destination; clarifies missing consequential choices |
+| Add a knob, switch or mode to an existing module | `add-parameter` |
+| Test or verify a module, or decide whether work is finished | `verify-module` |
+| A `maru` command, MCP tool, sign-in, build or workbench is not working | `debug-toolchain` |
+| Build for a device, fork firmware, or make a hardware/controller app | `build-for-hardware`: uses exact device evidence and the installed target workflow |
+| Put a plug-in or module on Maru or its marketplace | `list-plugin` |
+
+They ship with the Maru agent plugin. If one is not installed, read
+`skills/<name>/SKILL.md` from https://github.com/maru-audio/maru-skill and
+follow it.
+
 ## 1. Check the CLI
 
 ```sh
 maru --version
 ```
 
-If `maru` is not installed, use `npx maruaudio@latest` in its place for every
-command below, and suggest that the user install it with `npm i -g maruaudio`.
+Inside a project, use its installed CLI (`npm exec -- maru …`) and scripts so
+versions agree. For an authorized setup without a CLI, use
+`npx --yes maruaudio@latest` to start; a global install is optional.
 
 Then check what this machine can do:
 
@@ -40,7 +59,8 @@ maru doctor
 ```
 
 It reports sign-in state, installed components and missing prerequisites, each
-with the command that fixes it.
+with the command that fixes it. Match missing prerequisites to the operation
+requested: a missing native toolkit does not block a local JS preview.
 
 ## 2. Discover before acting
 
@@ -74,22 +94,31 @@ If the host supports MCP, `maru mcp` serves the same operations as tools.
 `maru mcp install` registers Maru's hosted connector with the agent, for the
 user's Maru account (projects, builds, community modules, generation; sign-in
 on first use); `--local` registers `maru mcp` for this checkout and `--both`
-registers both. It changes the agent's configuration, so ask the user first.
+registers both. It changes the agent's configuration; use existing setup
+authorization or ask before changing it.
 
 ## 3. Scaffold, preview and build
 
-For a new local module, inspect `maru init --help` and use the bundled
-scaffolder instead of assembling a project by hand:
+For a new local module, use the brief's musical role, formats and destination,
+as `create-module` describes. Clarify only consequential gaps. Inspect
+`maru init --help` and use the bundled scaffolder:
 
 ```sh
-maru init my-effect --kind processor-effect
+maru init my-effect --kind processor-effect --local --install
 # For a MIDI instrument: --kind processor-instrument
 ```
 
 The scaffold prints the dependency-install command and next steps. Follow the
 generated project's `AGENTS.md` and README, inspect its package scripts, and
-install dependencies with the project's package manager. Scaffolding alone
-does not install them; `--install` opts in.
+install dependencies with the project's package manager. A request for a
+working local project includes its dependency setup. Preserve a README-only
+repository's brief before scaffolding into it; `--force` may overwrite files.
+
+Run the generated `dev` script for the bundled workbench and hot reload. The
+npm SDK supplies that runner; do not build a separate host page or require a
+Maru source checkout for the first JS preview. Keep the process running for
+the user's requested preview, check its actual ready result and share the URL
+as soon as it is ready. Then continue implementation and verification there.
 
 The project's README becomes the module's public About page when it is
 published. Keep it for players and put development notes in `DEVELOPMENT.md`.
@@ -99,18 +128,19 @@ Choose guidance by the user's goal; read only what the task needs using
 
 | Goal                                               | Guidance                                                                                                            |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Start a new instrument or effect, or work from an image | `face-from-reference` first: parameters, then the face, then the DSP                                          |
+| Design any module face, including MIDI tools, with or without an image | `face-from-reference`, `ui-kit-faces`: control inventory, PluginUI assembly/theme, wireframe, shared components and rendered review; order DSP proofs by the risks in `project-planning` |
 | Build or change an instrument or effect            | `processor-authoring`, `parameters-and-schema`; `ui-kit-faces` for controls, `build-preview-export` for delivery    |
 | Set up CI builds or publish from GitHub            | `build-preview-export`; [CI workflow example](https://maru.audio/docs/build-and-publish-in-ci), after checking installed command and component availability |
 | Build a MIDI processor or sequencer                | `midi-and-event-modules`, plus the module guides for the parts being changed                                        |
 | Work with notes, chords, scales or rhythms in code | [Symbolic library guide](https://maru.audio/docs/symbolic-library); check the installed package's public exports |
 | Make sounds, kits or sampler banks                 | `sample-kits-and-banks`, `generation-and-transcription`; `assets-and-resources` when loading samples into a module  |
 | Generate audio or transcribe a recording           | `generation-and-transcription`                                                                                      |
-| List firmware you wrote for a music device         | [Community firmware guide](https://maru.audio/docs/community-firmware) |
+| Build firmware or a MIDI-controller app for a music device | `build-for-hardware`; discover matching installed guides and exact device/target capabilities |
+| List firmware you wrote for a music device         | `build-for-hardware` and the [Community firmware guide](https://maru.audio/docs/community-firmware) |
 | List my plugin on the Maru marketplace (built with JUCE, iPlug2, DPF, nih-plug or anything else) | The `list-on-marketplace` task: `maru marketplace whoami`, `project`, `draft`, `media`, `release`, `offer`, `submit`, `status`. Confirm the name, price and licence with the user before submitting; no Maru build |
 | The same plugin from a public GitHub repository and its releases | `repository-listing`: `maru listing init`, `check`, `publish`, `status`. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens |
 | List a plugin already built with another framework (JUCE, iPlug2, binaries on GitHub releases) | `repository-listing`: `maru listing init`, `check`, `publish`, `status`; no Maru build. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens |
-| Publish this plugin on Maru (a NIH-plug, DPF, JUCE or other project that isn't a Maru module) | `publish-external-plugin`: run `maru publish` in the project; it detects the framework and offers the three routes. `--route project` uploads, detects and builds after the maker confirms recipe and platform; then `maru build status --wait`, `maru release check`, `maru release publish`. Each failure ends with a code in brackets; the guide says what to do for each |
+| Publish this plugin on Maru (a NIH-plug, DPF, JUCE or other project that isn't a Maru module) | `publish-external-plugin`: run `maru publish` in the project; it detects the framework and offers the three routes. `--route project` uploads, detects and builds after the maker confirms recipe and platform; then `maru build status <id> --wait-seconds 45`, `maru release check`, `maru release publish`. Each failure ends with a code in brackets; the guide says what to do for each |
 
 For interface icons, browse [Maru Icons](https://pluginui.com/icons) and use
 the separately published `maru-icons/react` components. They work with Maru
@@ -127,8 +157,6 @@ available guides, including presets and saved state.
 - Keep the declaration, parameter contract, Processor, face and presets in
   the generated project. Use its public `maruaudio/*` imports and shared
   controls; the face controls the module rather than implementing its audio.
-- Run the generated `dev` script for the live workbench. Edit and audition
-  there, using the user's listening feedback for musical acceptance.
 - Run the project's typecheck and `maru module check . --fast` while editing.
   Before calling the work done, run the full `maru module check .`: `--fast`
   skips the publish and browser gates, so it is not a pass. If a gate fails or
@@ -169,14 +197,31 @@ running one.
   readings do not replace listening.
 - Claim only targets you actually built and checked. Never present a mock or
   placeholder render as real output.
+- Read MCP results for `isError` and operation failures; a successful tool
+  transport alone does not establish that a build or server started.
 - When something is missing (sign-in, a component, an extension), report the
   exact command `maru` printed, such as `maru login`.
   Do not work around it with a different runtime or a hand-written substitute.
-- Obtain the user's authorization before signing in, downloading components,
-  running paid or hosted generation, publishing, or passing `--yes` to a
-  destructive command. Existing explicit authorization for that action counts.
+- Use existing authorization for setup and reversible local work. Obtain
+  authorization for additional account/configuration changes, paid or hosted
+  work, publication or destructive actions. Judge a command's effect; `--yes`
+  is not itself a new action or permission.
+- Never approve sound by reading code, and do not play audio aloud: start the
+  workbench with `--silent` and leave listening to the user.
 - Finish with: files you changed or created, output files, the settings used
   (including seeds), the checks you ran and their results, and anything that
   was unavailable.
+
+## Maru feedback
+
+If part of the work was harder than Maru should make it (a missing command or
+tool, an awkward step, a check you could not run), end your reply with the
+line `MARU FEEDBACK: <version>`, where `<version>` is what `maru --version`
+prints (with only the hosted connector, write `connector` and the server
+version your MCP client shows). Follow it with a short prompt that could be
+used to improve Maru: what you were doing, what was awkward, and the command,
+tool or API you wished for. Offer to file it at
+https://github.com/maru-audio/maru-skill/issues or send it through
+https://maru.audio/contact; file nothing without the user's yes.
 
 Documentation for people: https://maru.audio/docs/skills
