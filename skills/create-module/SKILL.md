@@ -19,9 +19,24 @@ scaffolding or a state-only face does not finish that request.
    step 3 and work in the user's account.
 
 2. **Plan sound and face together.** `maru guide read project-planning
-   face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
-   names). Record real DSP/control behavior, player tasks, art direction and
-   shared components in one brief; save it in the project once it exists.
+face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
+   names). Reuse a supplied brief and existing decisions; ask only about missing
+   choices that change the result. For an open-ended idea, invite a short sound
+   and design choice before committing to either: the musical character and
+   response, then the visual direction and most important player gesture. Use
+   plain language and concrete alternatives, recommend a direction, and offer
+   **"Choose for me"**. For example: "Warm and subtle or crunchy and obvious?
+   A studio console or a playful graphic face? I can choose a coherent pair."
+   Ask only the relevant parts; a detailed brief, a small fix or "use your
+   judgment" needs no new interview. If the user delegates, choose, state the
+   assumptions briefly and proceed. While optional preferences are unanswered,
+   continue the reversible starter/preview work; do not make them a setup gate.
+   Do not require algorithm or architecture choices to get started; respect a
+   technical direction the user supplies.
+   Record real DSP/control behavior, player
+   tasks, art direction and shared components in one brief; save it in
+   `DEVELOPMENT.md` once the project exists. Keep planning brief enough to open
+   the starter before extended design.
    Default to control contract -> working PluginUI React face -> DSP integration
    -> end-to-end proof. A concrete sound feasibility risk may need a small early
    probe. This sequence requires no extra approval within the authorized task.
@@ -38,15 +53,15 @@ scaffolding or a state-only face does not finish that request.
    In a folder, `maru init --kind` offers these starters (`maru init --help`
    lists them for the installed version):
 
-   | Kind | What it starts |
-   | --- | --- |
-   | `processor-effect` | Audio in, audio out, with its own DSP, a custom face and factory presets |
-   | `processor-instrument` | MIDI in, audio out: a polyphonic synth with its own DSP |
-   | `effect` | Audio in, audio out, wired from existing Maru DSP nodes (a Graph) |
-   | `instrument` | MIDI in, audio out, wired from existing Maru DSP nodes (a Graph) |
+   | Kind                          | What it starts                                                                                   |
+   | ----------------------------- | ------------------------------------------------------------------------------------------------ |
+   | `processor-effect`            | Audio in, audio out, with its own DSP, a custom face and factory presets                         |
+   | `processor-instrument`        | MIDI in, audio out: a polyphonic synth with its own DSP                                          |
+   | `effect`                      | Audio in, audio out, wired from existing Maru DSP nodes (a Graph)                                |
+   | `instrument`                  | MIDI in, audio out, wired from existing Maru DSP nodes (a Graph)                                 |
    | `--face-first --params a,b,c` | A passthrough effect with these parameters bound to a starter face, for designing the face first |
-   | `--from <reference>` | A copy of an official or remixable community module, such as `@maru/osc-mini` |
-   | `firmware --device <id>` | A source-only firmware listing for a device in Maru's hardware catalog |
+   | `--from <reference>`          | A copy of an official or remixable community module, such as `@maru/osc-mini`                    |
+   | `firmware --device <id>`      | A source-only firmware listing for a device in Maru's hardware catalog                           |
 
    A MIDI tool (MIDI in, MIDI out, no audio) and a generator (audio out with
    no input) have no starter of their own. Say so, then offer to start from
@@ -84,6 +99,7 @@ scaffolding or a state-only face does not finish that request.
      targeting `.`; alternatively scaffold in a staging directory and merge
      without losing existing work. Follow
      the printed next steps and read the generated `AGENTS.md` and `README.md`.
+     Keep one package manager and lockfile, and record the installed SDK version.
    - In the account: `maru_create_studio_project` with the exact `templateKey`
      the user chose, a short title and the idea as the `brief`. Give the user
      the Studio link from the result.
@@ -93,6 +109,11 @@ scaffolding or a state-only face does not finish that request.
    SDK includes the workbench/player and hot reload; use them before considering
    a custom runner. Confirm readiness and give the URL promptly. A native
    toolkit or Maru source checkout is not required for the first JS preview.
+   Verify the actual built face and module identity at that URL before extended
+   design, account setup or native discovery. Describe starter or passthrough
+   sound as such. If the port is occupied, use a free port accepted by the
+   installed command; do not stop another server or assume a source-only flag
+   is released.
    Run `maru module check . --fast` and inspect its starting face; retain the
    result to distinguish setup failures. Run full **Verify** on the finished
    module. Save the joint brief from step 2 in the project's Markdown notes,
@@ -118,12 +139,18 @@ scaffolding or a state-only face does not finish that request.
    Reconcile any necessary contract changes with the UI; preserve its chosen
    composition and shared behavior. Rerun UX checks after wiring, then measure
    actual sound. State-only controls and starter sound do not finish a combined
-   request. Judge visual quality separately from DSP evidence and listening.
+   request. Observe a face edit and a DSP edit activating through the retained
+   workbench; a save or rebuild alone does not prove hot reload. Record the
+   working preview and resume checkpoint in `DEVELOPMENT.md`. Judge visual
+   quality separately from DSP evidence and listening.
 
 ## Rules
 
 - Reuse the user's answers and established workspace context. Ask only for
-  missing decisions that change the musical role, destination or distribution.
+  missing decisions that change the sound, player experience, musical role,
+  destination or distribution. Save chosen defaults with the brief so a resumed
+  agent does not ask again. Aesthetic defaults do not grant publication or
+  generation permission.
 - Use only kinds, template keys and references that `maru init --help` or
   `maru_list_studio_templates` returned. Never invent a template key, a
   project or a link.
@@ -131,8 +158,10 @@ scaffolding or a state-only face does not finish that request.
 - Pass `--local`: in a terminal, `maru init` otherwise offers to publish the
   new module to the user's profile. Publishing needs the user's explicit
   request.
-- Never change the generated module `id`, and never hand-edit `build/`,
-  `dist/` or `*.generated.ts`.
+- Preserve established module identity. Resolve a provisional local identity
+  once through the installed publication guidance before first sharing; keep
+  that identity for retries and updates. Never hand-edit `build/`, `dist/` or
+  `*.generated.ts`.
 - Start the workbench silently: `npm run dev -- --silent` (or
   `maru dev --silent`). Agent sessions do not play audio aloud; the user
   listens.
@@ -171,7 +200,10 @@ behavior and targets they exercised; they do not approve its sound.
 
 End with: where the project is (folder path or Studio link), the kind and
 formats the user chose, files created, each check from **Verify** with its
-result or the reason it did not run, and the next step.
+result or the reason it did not run, the retained live preview URL and its
+observed state, and the next step. When sharing is also requested, follow
+`maru-agent`'s publication guidance and report the returned page and exact
+publication identities separately from local verification.
 
 ## Maru feedback
 

@@ -5,22 +5,28 @@ description: Start a new synth from a Maru template, in the user's Maru account 
 
 Start a new Maru synth for the idea the user described.
 
-1. Ask where the user wants to work if it is not clear: in their Maru account
+Use `create-module` for the joint sound-and-face brief, early preview,
+implementation and checks. Reuse the user's choices; for an open idea, offer
+recommended sound/design directions and "choose for me" as that skill describes.
+
+1. Ask where the user wants to work only if context does not establish it:
+   in their Maru account
    (Studio, nothing installed) or in a folder on this computer. Without a
    terminal on the user's computer (for example in a chat app), work in their
    account.
 2. In their account, call `maru_list_studio_templates` with
    `kind: "instrument"` and `present: true`, so the user sees the templates.
-   Suggest the one that fits the idea in a sentence and let them choose; do
-   not pick for them. Then call
-   `maru_create_studio_project` with the chosen template's exact
+   Recommend the one that fits the brief in a sentence. Ask when materially
+   different choices remain; when the user delegates, choose the best fit.
+   Then call `maru_create_studio_project` with the selected template's exact
    `templateKey`, a short title and the idea as the `brief`. Give the user the
    Studio link from the result.
-3. In a folder, ask which formats the synth should ship in (browser, and any
-   of standalone, VST3, CLAP, AU), say that you will create a module project
-   there and wait for the user to agree. Then run
-   `npx maruaudio init <folder> --kind processor-instrument --local` and follow
-   the next steps it prints. The `create-module` skill has the full workflow.
+3. In a folder, reuse the stated formats. If distribution is undecided,
+   continue with a browser preview and ask about native needs alongside the
+   work. State the destination, then proceed within the authorized creation
+   request. Use the installed CLI, or `npx --yes maruaudio@latest` for authorized
+   setup, to run `maru init <folder> --kind processor-instrument --local --install`
+   and follow its next steps. The `create-module` skill has the full workflow.
    Before implementing the face, read `maru guide read face-from-reference
    ui-kit-faces`: choose a PluginUI assembly/theme, sketch the musical groups
    and map them to shared controls. Use the same design workflow in Studio

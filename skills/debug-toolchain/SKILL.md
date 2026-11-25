@@ -23,22 +23,30 @@ rules below ask for it), and run the failing step again.
    (errors arrive as JSON on stderr) or `--verbose`. The exit code says what
    kind of failure it is:
 
-   | Code | Meaning | What to do |
-   | --- | --- | --- |
-   | 1 | The operation ran and failed | Read its report; fix the module or input |
-   | 2 | Usage or validation error; nothing ran | Check `maru <group> <command> --help` or `maru tools describe --json` |
-   | 3 | Not signed in, or credentials rejected | Use authorized sign-in or ask, then `maru login` |
-   | 4 | Missing prerequisite | Run the `fix:` command it printed |
-   | 5 | Refused by the item's licence | Report the licence; do not copy around it |
-   | 6 | A paid item this account does not own | Tell the user |
-   | 7 | The author does not share this module's DSP source | Offer to play or install it from the page `maru` printed instead |
+   | Code | Meaning                                            | What to do                                                            |
+   | ---- | -------------------------------------------------- | --------------------------------------------------------------------- |
+   | 1    | The operation ran and failed                       | Read its report; fix the module or input                              |
+   | 2    | Usage or validation error; nothing ran             | Check `maru <group> <command> --help` or `maru tools describe --json` |
+   | 3    | Not signed in, or credentials rejected             | Use authorized sign-in or ask, then `maru login`                      |
+   | 4    | Missing prerequisite                               | Run the `fix:` command it printed                                     |
+   | 5    | Refused by the item's licence                      | Report the licence; do not copy around it                             |
+   | 6    | A paid item this account does not own              | Tell the user                                                         |
+   | 7    | The author does not share this module's DSP source | Offer to play or install it from the page `maru` printed instead      |
 
-   Over MCP, inspect `isError` and the operation's result as well as transport
-   success. An error returned as tool content is still a failed operation.
+   Over MCP, inspect `isError`, the operation's status and every relevant check
+   row as well as transport success. An error returned as tool content is still
+   a failed operation; an `ok` envelope does not erase failed or unavailable rows.
+   Preserve the original result before repair and distinguish a client, network
+   or sandbox refusal from a Maru operation that ran and failed.
 
-3. **Sign-in.** `maru whoami`. Use existing sign-in authorization or ask
-   before `maru login`; without a browser, `maru login --print-url` prints a
-   link for the user to open. Local JS development does not require sign-in.
+3. **Sign-in.** `maru whoami` with the intended profile and API origin. Reuse
+   suitable existing sign-in; check the intended operation's grants as well as
+   identity. Hosted connector access does not prove the CLI can publish, and
+   successful identity lookup does not prove publication authority. Use existing
+   sign-in authorization or ask before `maru login`; without a browser,
+   `maru login --print-url` prints a link for the user to open. Local JS
+   development does not require sign-in. Use supported credential interfaces;
+   do not extract connector credentials or assume automatic CLI token import.
 
 4. **MCP tools missing or listed twice.** `maru mcp status` shows which agents
    have Maru's servers. The hosted `maru` server (https://maru.audio/mcp) acts
@@ -49,6 +57,10 @@ rules below ask for it), and run the failing step again.
    the agent's configuration only within existing setup authorization or after asking.
    Over MCP, a tool name is the operation name with `maru_` in front, such as
    `maru_module_doctor`.
+   After any required client reload, verify actual skill discovery and a local
+   guide or project operation from the intended folder. Inspect the selected
+   root when a project is missing; do not recreate it in the wrong root.
+   Configuration and standalone transport checks alone do not prove attachment.
 
 5. **Module toolchain.** In the project, `maru module doctor` reports whether
    the engine, worklet runtime and required tools are complete enough to build
@@ -92,7 +104,9 @@ rules below ask for it), and run the failing step again.
 - Never read or expose secret files or ask the user to paste a token. Use
   Maru's sign-in and credential interfaces.
 - Quote `maru`'s own fix command exactly; do not paraphrase it into a
-  different command.
+  different command. Check it against the installed command's help before
+  retrying. If the printed fix is unsupported, retain that contradiction and
+  use a supported repair rather than repeating it or inventing a flag.
 - Read `maru guide read cli-and-operations` before explaining why a command
   is unavailable.
 
@@ -108,7 +122,8 @@ message, not the old one.
 ## Report
 
 End with: the failing command and its original message, the cause, what you
-ran to fix it (and what the user approved), the result of the rerun, and any
+ran to fix it (and what the user approved), the installed version and selected
+project/profile where relevant, the result of the rerun, and any
 remaining blocker with the command `maru` names for it.
 
 ## Maru feedback

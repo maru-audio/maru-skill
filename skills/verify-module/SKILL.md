@@ -12,9 +12,14 @@ reading of the code is not evidence, and neither is a tool's "done".
 ## Steps
 
 1. **Know what is declared.** Read the module's declaration (`src/index.ts`)
-   for its kind and ports. Run `maru module paths .` for the project settings,
+   for its kind and ports. Reuse the brief and checkpoint in `DEVELOPMENT.md`;
+   record the installed CLI/SDK version and the requested verification scope.
+   Run `maru module paths .` for the project settings,
    including the declared native formats (`build.nativeFormats` in
    `.maru/config.json`; VST3, CLAP, AU and standalone when unset).
+   Keep local JS review, native qualification and online sharing as separate
+   outcomes; default native settings do not require toolkit setup before a JS
+   preview can be reviewed.
 
 2. **Check the toolchain.** `maru module doctor` (MCP: `maru_module_doctor`).
    Note what it reports missing; every check that needs it becomes a gap.
@@ -47,6 +52,9 @@ reading of the code is not evidence, and neither is a tool's "done".
    help and guides for available host-follow and interaction checks. A static
    capture alone does not prove controls, preset recall or state restoration;
    exercise those through the actual face/host bridge and report each result.
+   When live iteration is in scope, observe separate face and DSP edits reaching
+   the active preview; report a last-working preview separately from a failed
+   requested edit. A rebuilt artifact alone does not prove reload activation.
    Show the user the images. `maru module verify-browser .` drives the face
    in a headless browser and writes a report; read what it actually checked.
 
@@ -73,8 +81,10 @@ reading of the code is not evidence, and neither is a tool's "done".
 - An unavailable, skipped or `--fast` check is not a pass. Say which check,
   why it did not run, and the command that would make it available, in
   `maru`'s own words.
-- Inspect MCP `isError` and operation results; successful transport alone is
-  not a passing check. Keep a requested live preview running and report its URL.
+- Inspect MCP `isError`, operation status and individual check rows; successful
+  transport or an `ok` envelope alone is not a passing check. Preserve failed
+  results before repair and distinguish environment/client refusals from module
+  failures. Keep a requested live preview running and report its actual URL.
 - Claim only the formats you built and checked. A browser preview does not
   prove a native format, and a native build does not prove a DAW or device.
 - Do not weaken a check, raise a tolerance or edit a reference to make it
@@ -91,16 +101,21 @@ where one applies, or the reason it did not run.
 
 End with a table, one row per check:
 
-| Check | Command | Result | Evidence |
-| --- | --- | --- | --- |
-| Toolchain | `maru module doctor` | ready / missing items | what it listed |
-| Release checks | `maru module check .` | pass / fail / unavailable rows | failing row names |
-| Offline render | the eval, preview or app-run command used | numbers | loudness, peak, RMS or note checks |
-| Face | `maru module screenshot .`, plus the installed host's supported interaction checks | captured / refused; interaction passed / failed / unavailable | image paths and observed control behavior |
-| Each native format | `maru module verify .` or `maru plugin build` | built and qualified / failed / not built | report path |
-| Listening | the user | not done by the agent | what to listen for |
+| Check              | Command                                                                            | Result                                                        | Evidence                                  |
+| ------------------ | ---------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------- |
+| Toolchain          | `maru module doctor`                                                               | ready / missing items                                         | what it listed                            |
+| Release checks     | `maru module check .`                                                              | pass / fail / unavailable rows                                | failing row names                         |
+| Offline render     | the eval, preview or app-run command used                                          | numbers                                                       | loudness, peak, RMS or note checks        |
+| Face               | `maru module screenshot .`, plus the installed host's supported interaction checks | captured / refused; interaction passed / failed / unavailable | image paths and observed control behavior |
+| Each native format | `maru module verify .` or `maru plugin build`                                      | built and qualified / failed / not built                      | report path                               |
+| Listening          | the user                                                                           | not done by the agent                                         | what to listen for                        |
 
 Then list the files you changed, if any, and the next action for each gap.
+If sharing was requested, also verify the returned page and bind it to the
+publisher's exact account, module/project, revision and Release identities.
+Retain its receipt and resume state for updates to the same project; a local
+package, dry-run or preview URL does not establish online publication. Report
+missing publication evidence as a gap rather than inferring it from local checks.
 
 ## Maru feedback
 

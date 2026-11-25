@@ -8,7 +8,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "maruaudio@0.0.7",
+        "maruaudio@0.0.8",
         "mcp"
       ]
     }

@@ -1,21 +1,28 @@
 ---
 name: list-plugin
-description: Put a plug-in on Maru - a Maru module, a plug-in built with JUCE, iPlug2, DPF, nih-plug or any other framework, or one released on GitHub - by choosing the right route with the user and confirming the name, price and licence before anything goes to review. Use when asked to list, publish, sell, release or share a plug-in or module on Maru or its marketplace.
+description: Put a plug-in on Maru - a Maru module, a plug-in built with JUCE, iPlug2, DPF, nih-plug or any other framework, or one released on GitHub - using the project's delivery route and the user's approved name, price and licence. Use when asked to list, publish, sell, release or share a plug-in or module on Maru or its marketplace.
 ---
 
 # List a plug-in on Maru
 
-Maru has four routes to a listing. Each is a different command set, and none
-of them should be chosen for the user without their answer.
+Maru has four routes to a listing. Use the project and the user's intended
+delivery to choose the command set. Reuse decisions and authorization already
+given in the brief or conversation; ask only about consequential gaps.
 
 ## Steps
 
-1. **Sign in.** `maru whoami`. If not signed in, ask before `maru login`.
+1. **Verify the intended account.** Recover the explicit CLI profile and issuer
+   from setup or the local MCP's unverified context when supplied. Use that
+   profile for every account command below; a named profile does not change
+   plain CLI defaults. Run `maru whoami --json` with that explicit profile and
+   compare account, issuer, expiry and required grants with the brief or saved
+   checkpoint. Reuse suitable
+   authorization; use supported sign-in only when needed and authorized.
    The marketplace route needs
    `maru login --scope marketplace:read --scope marketplace:write`.
 
-2. **Ask which route fits**, after looking at the folder and asking the user
-   how people should get the plug-in:
+2. **Choose the route** from the folder and established delivery intent. Ask
+   how people should get the plug-in only when that choice is unresolved:
 
    | The user has | Route | Commands |
    | --- | --- | --- |
@@ -36,23 +43,25 @@ of them should be chosen for the user without their answer.
    product so you update it rather than create a second one.
 
 4. **Write the public text with the user.** Draft the title, tagline,
-   description and support address from what you read in the project. Show
-   the user the exact text that will be public and confirm the name before
-   saving it.
+   description and support address from the approved brief and project. Reuse
+   the established name and copy. Review changed public text with the user
+   when it falls outside their existing instruction.
 
-5. **Licence, rights and price come from the user.** Ask for the licence
-   (its name or SPDX expression, and the text people agree to). Read the user
+5. **Licence, rights and price come from the user.** Reuse explicit decisions;
+   ask for any missing licence (name or SPDX expression and agreement text),
+   price, audience or source visibility. Read the user
    the rights or redistribution declaration from the tool's description and
-   pass it only if they confirm it. Ask what it costs; never guess or round a
-   price.
+   pass it only if they have confirmed that declaration. Never guess or round
+   a price.
 
 6. **Dry run where the route offers one.** `maru publish --dry-run` for a
    module, `maru listing check` for a repository, `"dryRun": true` for
    `maru marketplace draft`.
 
-7. **Confirm, then submit.** Show the name, the price, the licence and what
-   will be public, and ask. Only then run the step that publishes or submits
-   for review.
+7. **Publish within the approved scope.** Show the name, price, licence and
+   what will be public. Use existing explicit authorization for this exact
+   publication; ask only when it is missing or the scope changed. Then run
+   the step that publishes or submits for review.
 
 8. **Read the outcome back** (see **Verify**) and report.
 
@@ -67,8 +76,8 @@ exact input with `maru tools describe --json`.
 
 ## Rules
 
-- Ask the user which route, which owner, the public text, the licence and
-  the price. Do not decide any of them.
+- Preserve the user's chosen owner, public text, licence, price, audience and
+  source visibility. Ask about missing decisions; never silently widen them.
 - A request to build or package does not authorize publishing or
   submitting. Publication needs the user's explicit yes, given in this
   conversation or earlier for this exact action.
@@ -76,6 +85,10 @@ exact input with `maru tools describe --json`.
   `listings:publish`, created by the user at https://maru.audio/account/tokens.
 - Give only links the tools returned. Never write a download or page address
   yourself.
+- Retain the intended account and publication's project, revision and Release
+  identities in the development checkpoint. Before a retry or update, verify
+  the explicit profile with `whoami` again and continue the same project;
+  bootstrap context and a prior success are not fresh account verification.
 - If a step is refused, report its message and the command it names; do not
   work around it. A publisher agreement is accepted by the user on Maru, not
   by the agent.
@@ -89,7 +102,11 @@ reply:
   waits for Maru's scan and review, and anything refused with its reason.
 - Repository: `maru listing status` shows the listings and their last read.
 - Module: `maru module status` shows the live release, whether its source and
-  a screenshot are attached, and any interrupted publish.
+  a screenshot are attached, and any interrupted publish. For an unlisted
+  module, retain the returned full page URL and use it unchanged for resolve
+  and install. A shorthand `@handle/slug[@version]` refusal does not establish
+  that the publication is missing. Check the installed `maru resolve --help`
+  and `maru install --help` for usage.
 - Hosted build: `maru build status <id>` shows each bundle's inspection and
   health checks; a check that did not run is not a pass.
 
