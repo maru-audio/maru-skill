@@ -48,8 +48,9 @@ follow it.
 maru --version
 ```
 
-Inside a project, use its installed CLI (`npm exec -- maru …`) and scripts so
-versions agree. For an authorized setup without a CLI, use
+Inside a project, use its installed CLI (`npx --no-install maruaudio …`) and
+scripts so versions agree. Never run a bare `npx maru` or `npm exec -- maru`:
+they can download and run an unrelated npm package named `maru`. For an authorized setup without a CLI, use
 `npx --yes maruaudio@latest` to start; a global install is optional.
 Record the version actually used; source documentation or a plugin update does
 not establish which SDK the project or local server runs. Preserve the existing

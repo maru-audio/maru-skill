@@ -16,7 +16,7 @@ rules below ask for it), and run the failing step again.
    tools and the agent skill, each row with `fix:` when something is missing.
    `maru doctor --paths` shows where Maru reads and writes. If `maru` itself
    is missing, use `npx --yes maruaudio@latest` within authorized setup; a global install is optional.
-   Inside a module project, use the project's own CLI (`npm exec -- maru …`, or its
+   Inside a module project, use the project's own CLI (`npx --no-install maruaudio …`, or its
    `package.json` scripts) so the version matches its dependencies.
 
 2. **Read the failure exactly.** Rerun the failing command with `--json`

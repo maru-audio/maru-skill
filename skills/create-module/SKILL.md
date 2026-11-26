@@ -12,8 +12,10 @@ scaffolding or a state-only face does not finish that request.
 
 ## Steps
 
-1. **Check the CLI.** Use the project's installed CLI (`npm exec -- maru …`) when present; run
-   `maru --version`, then `maru doctor`. If missing, use
+1. **Check the CLI.** Use the project's installed CLI
+   (`npx --no-install maruaudio …`) when present; run `maru --version`, then
+   `maru doctor`. Never run a bare `npx maru` or `npm exec -- maru`: they can
+   download and run an unrelated npm package named `maru`. If missing, use
    `npx --yes maruaudio@latest` for authorized setup; a global install is optional. Match prerequisites
    to the requested operation. With only the hosted connector and no shell, skip to
    step 3 and work in the user's account.
