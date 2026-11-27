@@ -1,6 +1,6 @@
 ---
 name: debug-toolchain
-description: Find out why a Maru command, MCP tool, sign-in, build or workbench is not working - the CLI, sign-in, the hosted and local MCP servers, the native toolkit, the Processor compiler, browser checks, or a module that is silent - and fix the cause instead of working around it. Use when a maru command fails or is missing, Maru tools do not appear, a build or check reports something unavailable, or a module makes no sound.
+description: Find out why a Maru command, MCP tool, sign-in, build or workbench is not working - the CLI, sign-in, the hosted and local MCP servers, the native toolkit, the Processor compiler, browser checks, or a module that is silent - and fix the cause instead of working around it. Use when a npx --no-install maruaudio command fails or is missing, Maru tools do not appear, a build or check reports something unavailable, or a module makes no sound.
 ---
 
 # Debug the Maru toolchain
@@ -11,10 +11,10 @@ rules below ask for it), and run the failing step again.
 
 ## Steps
 
-1. **Version and machine.** `maru --version`, then `maru doctor`. Doctor
+1. **Version and machine.** `npx --no-install maruaudio --version`, then `npx --no-install maruaudio doctor`. Doctor
    lists Node, sign-in, installed components, the Processor compiler, build
    tools and the agent skill, each row with `fix:` when something is missing.
-   `maru doctor --paths` shows where Maru reads and writes. If `maru` itself
+   `npx --no-install maruaudio doctor --paths` shows where Maru reads and writes. If `maru` itself
    is missing, use `npx --yes maruaudio@latest` within authorized setup; a global install is optional.
    Inside a module project, use the project's own CLI (`npx --no-install maruaudio …`, or its
    `package.json` scripts) so the version matches its dependencies.
@@ -26,8 +26,8 @@ rules below ask for it), and run the failing step again.
    | Code | Meaning                                            | What to do                                                            |
    | ---- | -------------------------------------------------- | --------------------------------------------------------------------- |
    | 1    | The operation ran and failed                       | Read its report; fix the module or input                              |
-   | 2    | Usage or validation error; nothing ran             | Check `maru <group> <command> --help` or `maru tools describe --json` |
-   | 3    | Not signed in, or credentials rejected             | Use authorized sign-in or ask, then `maru login`                      |
+   | 2    | Usage or validation error; nothing ran             | Check `npx --no-install maruaudio <group> <command> --help` or `npx --no-install maruaudio tools describe --json` |
+   | 3    | Not signed in, or credentials rejected             | Use authorized sign-in or ask, then `npx --no-install maruaudio login`                      |
    | 4    | Missing prerequisite                               | Run the `fix:` command it printed                                     |
    | 5    | Refused by the item's licence                      | Report the licence; do not copy around it                             |
    | 6    | A paid item this account does not own              | Tell the user                                                         |
@@ -39,21 +39,21 @@ rules below ask for it), and run the failing step again.
    Preserve the original result before repair and distinguish a client, network
    or sandbox refusal from a Maru operation that ran and failed.
 
-3. **Sign-in.** `maru whoami` with the intended profile and API origin. Reuse
+3. **Sign-in.** `npx --no-install maruaudio whoami` with the intended profile and API origin. Reuse
    suitable existing sign-in; check the intended operation's grants as well as
    identity. Hosted connector access does not prove the CLI can publish, and
    successful identity lookup does not prove publication authority. Use existing
-   sign-in authorization or ask before `maru login`; without a browser,
-   `maru login --print-url` prints a link for the user to open. Local JS
+   sign-in authorization or ask before `npx --no-install maruaudio login`; without a browser,
+   `npx --no-install maruaudio login --print-url` prints a link for the user to open. Local JS
    development does not require sign-in. Use supported credential interfaces;
    do not extract connector credentials or assume automatic CLI token import.
 
-4. **MCP tools missing or listed twice.** `maru mcp status` shows which agents
+4. **MCP tools missing or listed twice.** `npx --no-install maruaudio mcp status` shows which agents
    have Maru's servers. The hosted `maru` server (https://maru.audio/mcp) acts
    on the user's account after they sign in and approve it in the browser; the
-   local `maru-local` server runs `maru mcp` on the open folder and needs Node
+   local `maru-local` server runs `npx --no-install maruaudio mcp` on the open folder and needs Node
    and `npx`. If the agent has both the Maru agent plugin and entries from
-   `maru mcp install`, the tools appear twice: offer `maru mcp remove`. Change
+   `npx --no-install maruaudio mcp install`, the tools appear twice: offer `npx --no-install maruaudio mcp remove`. Change
    the agent's configuration only within existing setup authorization or after asking.
    Over MCP, a tool name is the operation name with `maru_` in front, such as
    `maru_module_doctor`.
@@ -62,9 +62,9 @@ rules below ask for it), and run the failing step again.
    root when a project is missing; do not recreate it in the wrong root.
    Configuration and standalone transport checks alone do not prove attachment.
 
-5. **Module toolchain.** In the project, `maru module doctor` reports whether
+5. **Module toolchain.** In the project, `npx --no-install maruaudio module doctor` reports whether
    the engine, worklet runtime and required tools are complete enough to build
-   and export. `maru module paths .` and `maru module outputs .` show the
+   and export. `npx --no-install maruaudio module paths .` and `npx --no-install maruaudio module outputs .` show the
    project's settings, completed outputs and missing release steps. For local
    JS development, the npm SDK supplies the workbench/player and CLI assets:
    use the generated `dev` script instead of building a replacement host or
@@ -77,19 +77,19 @@ rules below ask for it), and run the failing step again.
    For hosted outputs, read `build-preview-export` and discover current
    capabilities and their refusal reasons. Publishing a browser release does
    not prove that native builds, signing or delivery are available.
-   `maru setup --list` shows available and installed components;
+   `npx --no-install maruaudio setup --list` shows available and installed components;
    follow the installed command's supported setup route when authorized. For one built
-   bundle, `maru plugin inspect <bundle>` reports what loading it found.
+   bundle, `npx --no-install maruaudio plugin inspect <bundle>` reports what loading it found.
 
-7. **Browser checks and screenshots.** `maru module screenshot` and the
-   browser gates of `maru module check` need Chromium. When they report a
+7. **Browser checks and screenshots.** `npx --no-install maruaudio module screenshot` and the
+   browser gates of `npx --no-install maruaudio module check` need Chromium. When they report a
    missing browser, pass `--chrome <path>` or set `CHROME_PATH`.
 
 8. **Silent module.** Before blaming the DSP, check in the workbench
    (`npm run dev -- --silent`) the selected audio or MIDI input, the
    transport, the monitor level, the host power control and its diagnostics.
-   Then render offline (`maru module preview --check`, or
-   `maru module eval --suite levels` for an effect) to see whether the module
+   Then render offline (`npx --no-install maruaudio module preview --check`, or
+   `npx --no-install maruaudio module eval --suite levels` for an effect) to see whether the module
    itself is silent.
 
 9. **Rerun the step that failed** and report what changed.
@@ -107,14 +107,14 @@ rules below ask for it), and run the failing step again.
   different command. Check it against the installed command's help before
   retrying. If the printed fix is unsupported, retain that contradiction and
   use a supported repair rather than repeating it or inventing a flag.
-- Read `maru guide read cli-and-operations` before explaining why a command
+- Read `npx --no-install maruaudio guide read cli-and-operations` before explaining why a command
   is unavailable.
 
 ## Verify
 
 The fix worked when the step that failed now succeeds: the original command
 exits 0 with the expected outcome, or the MCP operation's content confirms
-success without `isError`, or `maru doctor` shows the relevant row as `ok`.
+success without `isError`, or `npx --no-install maruaudio doctor` shows the relevant row as `ok`.
 For a workbench, confirm the live server and URL. Run the failing step again
 and quote its result. If it still fails, report the new
 message, not the old one.
@@ -131,7 +131,7 @@ remaining blocker with the command `maru` names for it.
 If part of this workflow was harder than Maru should make it (an error that
 did not name its fix, a missing diagnostic, a setup step you had to guess),
 end your reply with the line `MARU FEEDBACK: <version>`, where `<version>` is
-what `maru --version` prints (with only the hosted connector, write
+what `npx --no-install maruaudio --version` prints (with only the hosted connector, write
 `connector` and the server version your MCP client shows). Follow it with a
 short prompt that could be used to improve Maru: what you were doing, what was
 awkward, and the command, tool or API you wished for. Offer to file it at

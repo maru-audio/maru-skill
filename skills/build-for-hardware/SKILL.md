@@ -25,11 +25,11 @@ an image for a physical unit. Preserve upstream credit and source/asset rights.
 
 ## Discover the installed workflow
 
-With a shell, inspect `maru --version`, `maru hardware --help`, `maru guide list`
-and `maru tools list`. Read the installed guides whose triggers match. When
+With a shell, inspect `npx maruaudio --version`, `npx maruaudio hardware --help`, `npx maruaudio guide list`
+and `npx maruaudio tools list`. Read the installed guides whose triggers match. When
 listed, `firmware-and-device-authoring` covers these routes; Processor work also
 uses `processor-authoring`, `restricted-typescript` and `midi-and-event-modules`.
-Inspect schemas with `maru tools describe <operation>` instead of guessing flags.
+Inspect schemas with `npx maruaudio tools describe <operation>` instead of guessing flags.
 
 With MCP, inspect the tools the selected server advertises and read the matching
 guides through its guide operation. Copy exact advertised tool names. Local

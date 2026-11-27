@@ -25,9 +25,9 @@ recommended sound/design directions and "choose for me" as that skill describes.
    continue with a browser preview and ask about native needs alongside the
    work. State the destination, then proceed within the authorized creation
    request. Use the installed CLI, or `npx --yes maruaudio@latest` for authorized
-   setup, to run `maru init <folder> --kind processor-instrument --local --install`
+   setup, to run `npx maruaudio init <folder> --kind processor-instrument --local --install`
    and follow its next steps. The `create-module` skill has the full workflow.
-   Before implementing the face, read `maru guide read face-from-reference
+   Before implementing the face, read `npx --no-install maruaudio guide read face-from-reference
    ui-kit-faces`: choose a PluginUI assembly/theme, sketch the musical groups
    and map them to shared controls. Use the same design workflow in Studio
    through `maru_read_guide`; a synth without a reference image still needs a

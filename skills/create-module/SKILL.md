@@ -13,14 +13,15 @@ scaffolding or a state-only face does not finish that request.
 ## Steps
 
 1. **Check the CLI.** Use the project's installed CLI
-   (`npx --no-install maruaudio …`) when present; run `maru --version`, then
-   `maru doctor`. Never run a bare `npx maru` or `npm exec -- maru`: they can
+   (`npx --no-install maruaudio …`) when present; run `npx --no-install maruaudio --version`, then
+   `npx --no-install maruaudio doctor`. Never run a bare `npx maru` or `npm exec -- maru`: they can
    download and run an unrelated npm package named `maru`. If missing, use
    `npx --yes maruaudio@latest` for authorized setup; a global install is optional. Match prerequisites
-   to the requested operation. With only the hosted connector and no shell, skip to
-   step 3 and work in the user's account.
+   to the requested operation. Creating, previewing, checking and publishing a
+   local module needs a coding agent with a shell. A hosted connector supplies
+   documentation and account access; it cannot start the local workbench.
 
-2. **Plan sound and face together.** `maru guide read project-planning
+2. **Plan sound and face together.** `npx --no-install maruaudio guide read project-planning
 face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
    names). Reuse a supplied brief and existing decisions; ask only about missing
    choices that change the result. For an open-ended idea, invite a short sound
@@ -44,15 +45,17 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
    probe. This sequence requires no extra approval within the authorized task.
 
 3. **Resolve the destination from context.** Use the requested account, folder
-   or current module workspace. If none is established, ask whether the user
-   wants Studio in their Maru account or a folder on this computer.
+   or current module workspace. An empty project folder or local coding
+   workspace establishes a local destination: use it or a suitable project
+   subfolder without asking Studio versus folder again. Ask only when the
+   available context genuinely leaves the destination unresolved.
 
 4. **Choose a supported starter for the requested behavior.** Use the stated
    audio/MIDI inputs and outputs to choose the kind. Ask when the musical role
    or ports are ambiguous; explain the consequence in plain language. Do not
    ask the user to choose Graph versus Processor as an implementation detail.
 
-   In a folder, `maru init --kind` offers these starters (`maru init --help`
+   In a folder, `npx maruaudio init --kind` offers these starters (`npx maruaudio init --help`
    lists them for the installed version):
 
    | Kind                          | What it starts                                                                                   |
@@ -68,16 +71,18 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
    A MIDI tool (MIDI in, MIDI out, no audio) and a generator (audio out with
    no input) have no starter of their own. Say so, then offer to start from
    `processor-instrument` or `processor-effect` and change its facade as
-   `maru guide read midi-and-event-modules` describes.
+   `npx --no-install maruaudio guide read midi-and-event-modules` describes.
 
    In the user's account, call `maru_list_studio_templates` with
    `present: true` (optionally with `kind`: `effect`, `instrument`, `sampler`
    or `sequencer`). Reuse a selected template; ask if several materially
    different choices fit the brief.
 
-5. **Record the intended formats.** Reuse formats already specified. Ask about
-   missing distribution needs while continuing independent design work; a
-   local prototype can proceed with browser verification and native formats
+5. **Record the intended formats.** Reuse formats already specified. A request
+   for browser creation, preview or publication without native delivery is a
+   browser scope; do not reopen it as a native-format interview. Ask only about
+   consequential unresolved delivery needs while continuing independent design
+   work; a local prototype can proceed with browser verification and native formats
    recorded as undecided. Every audio module runs in the
    browser. Native formats are `standalone`, `vst3`, `clap`, `au` (macOS only)
    and `aax` (opt-in; the user supplies the AAX SDK). The default native set is
@@ -85,7 +90,7 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
    need and qualification. For a local project, record a choice other than the default
    after the project exists, in `.maru/config.json` as
    `{"schemaVersion": 1, "build": {"nativeFormats": ["vst3", "clap"]}}` with
-   the user's formats, and check it with `maru module paths .`. Local native builds need Maru's native toolkit (`maru doctor` shows
+   the user's formats, and check it with `npx --no-install maruaudio module paths .`. Local native builds need Maru's native toolkit (`npx --no-install maruaudio doctor` shows
    whether it is installed). For hosted output, discover actual export and
    publication capabilities with `build-preview-export`; browser publication
    does not establish native builds, signing or delivery.
@@ -93,7 +98,7 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
 6. **Create within the authorized scope.** State the destination and kind,
    then proceed when the request already authorizes creation. Ask only for
    unresolved consequential choices. Creation does not authorize publishing.
-   - In a folder: `maru init <dir> --kind <kind> --local` (or the
+   - In a folder: `npx maruaudio init <dir> --kind <kind> --local` (or the
      `--face-first`, `--from` or firmware flags from the table, with
      `--local`). A request for a working local project includes installing
      its dependencies with `--install`. In a README-only clone, save the
@@ -109,14 +114,16 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
 7. **Open the starter and check its baseline.** In a folder, start the generated
    `dev` script silently and keep it running for the user's preview. The npm
    SDK includes the workbench/player and hot reload; use them before considering
-   a custom runner. Confirm readiness and give the URL promptly. A native
+   a custom runner. `npx --no-install maruaudio dev` opens the workbench app (Preview, Parameters,
+   Source, Presets, Checks, Release; 360 px wide beside a chat works);
+   `npx --no-install maruaudio dev --simple` serves the lighter single-page workbench simple. Confirm readiness and give the URL promptly. A native
    toolkit or Maru source checkout is not required for the first JS preview.
    Verify the actual built face and module identity at that URL before extended
    design, account setup or native discovery. Describe starter or passthrough
    sound as such. If the port is occupied, use a free port accepted by the
    installed command; do not stop another server or assume a source-only flag
    is released.
-   Run `maru module check . --fast` and inspect its starting face; retain the
+   Run `npx --no-install maruaudio module check . --fast` and inspect its starting face; retain the
    result to distinguish setup failures. Run full **Verify** on the finished
    module. Save the joint brief from step 2 in the project's Markdown notes,
    then follow the UI checkpoint and integration below with
@@ -153,19 +160,20 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
   destination or distribution. Save chosen defaults with the brief so a resumed
   agent does not ask again. Aesthetic defaults do not grant publication or
   generation permission.
-- Use only kinds, template keys and references that `maru init --help` or
+- Use only kinds, template keys and references that `npx maruaudio init --help` or
   `maru_list_studio_templates` returned. Never invent a template key, a
   project or a link.
-- Scaffold with `maru init`; do not assemble a module project by hand.
-- Pass `--local`: in a terminal, `maru init` otherwise offers to publish the
+- Scaffold with `npx maruaudio init`; do not assemble a module project by hand.
+- Pass `--local`: in a terminal, `npx maruaudio init` otherwise offers to publish the
   new module to the user's profile. Publishing needs the user's explicit
   request.
-- Preserve established module identity. Resolve a provisional local identity
-  once through the installed publication guidance before first sharing; keep
-  that identity for retries and updates. Never hand-edit `build/`, `dist/` or
+- Never invent, request or edit a module ID. Creation and copying generate its
+  permanent identity; publishing handles older projects automatically. Preserve
+  the same identity for retries and updates and report the final `@handle/slug`
+  and URL. Never hand-edit `build/`, `dist/` or
   `*.generated.ts`.
 - Start the workbench silently: `npm run dev -- --silent` (or
-  `maru dev --silent`). Agent sessions do not play audio aloud; the user
+  `npx --no-install maruaudio dev --silent`). Agent sessions do not play audio aloud; the user
   listens.
 
 ## Verify
@@ -173,21 +181,24 @@ face-from-reference ui-kit-faces` (MCP: `maru_read_guide` with those three
 Run these on the new project and read each result. A check that could not run
 is a gap, not a pass.
 
-1. `maru module check . --fast` while setting up, then the full
-   `maru module check .` before you call the project ready.
-2. Offline render: for an effect, `maru module eval --suite levels --max-seconds 2`;
-   for a Graph module, `maru module eval`; for any module,
-   `maru module preview --check` renders its demo plans and checks the audio.
+1. `npx --no-install maruaudio module check . --fast` while setting up, then the full
+   `npx --no-install maruaudio module check .` before you call the project ready.
+2. Offline render: for an effect, `npx --no-install maruaudio module eval --suite levels --max-seconds 2`;
+   for a Graph module, `npx --no-install maruaudio module eval`; for any module,
+   `npx --no-install maruaudio module preview --check` renders its demo plans and checks the audio.
    Report the measured numbers.
-3. `maru module screenshot .` renders the built face at its declared size and
+3. `npx --no-install maruaudio module screenshot .` renders the built face at its declared size and
    refuses a blank, erroring or clipped face. Show the user the image.
    Review hierarchy, typography, grouping and interaction semantics against
-   the saved brief; check minimum and maximum sizes too. Exercise parameter
+   the saved brief; check minimum and maximum sizes too, and keep the same
+   composition at each rather than reflowing groups into a different layout.
+   Remove captions that explain the face (such as "predicted, not measured" or
+   axis notes): labels, values and units only. Exercise parameter
    edits and preset recall through the real workbench. Report mechanical
    results separately from visual judgment and listening.
-4. For each native format the user chose, `maru module verify .` (or
-   `maru plugin build . --format <format>`) when the native toolchain is
-   present. If `maru module doctor` reports it missing, say which formats were
+4. For each native format the user chose, `npx --no-install maruaudio module verify .` (or
+   `npx --no-install maruaudio plugin build . --format <format>`) when the native toolchain is
+   present. If `npx --no-install maruaudio module doctor` reports it missing, say which formats were
    not built.
 
 The same checks run over MCP on the local `maru-local` server as
@@ -207,12 +218,16 @@ observed state, and the next step. When sharing is also requested, follow
 `maru-agent`'s publication guidance and report the returned page and exact
 publication identities separately from local verification.
 
+Before that reply, start the module's `CHANGELOG.md` with this session's entry,
+as `maru-agent` describes, including its token and cost figures or
+`not reported`.
+
 ## Maru feedback
 
 If part of this workflow was harder than Maru should make it (a missing
 command or tool, an awkward step, a starter you had to work around), end your
 reply with the line `MARU FEEDBACK: <version>`, where `<version>` is what
-`maru --version` prints (with only the hosted connector, write `connector`
+`npx --no-install maruaudio --version` prints (with only the hosted connector, write `connector`
 and the server version your MCP client shows). Follow it with a short prompt
 that could be used to improve Maru: what you were doing, what was awkward, and
 the command, tool or API you wished for. Offer to file it at

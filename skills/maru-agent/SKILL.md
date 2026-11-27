@@ -37,6 +37,8 @@ has its own steps, rules, checks and report:
 | A `maru` command, MCP tool, sign-in, build or workbench is not working | `debug-toolchain`                                                                                        |
 | Build for a device, fork firmware, or make a hardware/controller app   | `build-for-hardware`: uses exact device evidence and the installed target workflow                       |
 | Put a plug-in or module on Maru or its marketplace                     | `list-plugin`                                                                                            |
+| Make or save presets for an existing module, without writing code     | `make-presets`                                                                                           |
+| Review or improve a plug-in interface's accessibility                  | `plugin-accessibility`                                                                                   |
 
 They ship with the Maru agent plugin. If one is not installed, read
 `skills/<name>/SKILL.md` from https://github.com/maru-audio/maru-skill and
@@ -44,8 +46,12 @@ follow it.
 
 ## 1. Check the CLI
 
+The local creation-to-publication workflow needs a coding agent with a shell.
+Skills guide it and the CLI runs the work; MCP supplies documentation and account
+access. Follow https://maru.audio/docs/quickstart for the complete first-plugin path.
+
 ```sh
-maru --version
+npx maruaudio --version
 ```
 
 Inside a project, use its installed CLI (`npx --no-install maruaudio …`) and
@@ -59,7 +65,7 @@ package manager and lockfile.
 Then check what this machine can do:
 
 ```sh
-maru doctor
+npx maruaudio doctor
 ```
 
 It reports sign-in state, installed components and missing prerequisites, each
@@ -69,11 +75,11 @@ requested: a missing native toolkit does not block a local JS preview.
 ## 2. Discover before acting
 
 ```sh
-maru --help                  # command groups
-maru <group> --help          # commands and options in one group
-maru guide list              # guides, each with the situation it applies to
-maru guide read <name...>    # read the guides whose trigger matches the task
-maru tools describe <operation> --json # exact schema for the operation needed
+npx maruaudio --help                  # command groups
+npx maruaudio <group> --help          # commands and options in one group
+npx maruaudio guide list              # guides, each with the situation it applies to
+npx maruaudio guide read <name...>    # read the guides whose trigger matches the task
+npx maruaudio tools describe <operation> --json # exact schema for the operation needed
 ```
 
 Read the matching guides before writing code or running a build. Add `--json`
@@ -85,21 +91,21 @@ The same guides are published as Markdown for reading without the CLI: the
 [guide index](https://maru.audio/guides/llms.txt) lists each with when to
 read it, `https://maru.audio/guides/<name>.md` serves one, and
 [all guides](https://maru.audio/guides/llms-full.txt) come in one file.
-Prefer `maru guide read` when the CLI is installed: it matches its version.
+Prefer `npx maruaudio guide read` when the CLI is installed: it matches its version.
 
 When choosing or implementing DSP, look up the relevant existing effects, nodes
 or modules and prefer reuse where it meets the brief:
 
 ```sh
-maru dsp effects             # named effects you can chain in MultiFX, by family
-maru module list             # modules in the catalog
-maru dsp nodes               # the engine's DSP nodes and their parameters
+npx maruaudio dsp effects             # named effects you can chain in MultiFX, by family
+npx maruaudio module list             # modules in the catalog
+npx maruaudio dsp nodes               # the engine's DSP nodes and their parameters
 ```
 
-If the host supports MCP, `maru mcp` serves the same operations as tools.
-`maru mcp install` registers Maru's hosted connector with the agent, for the
+If the host supports MCP, `npx maruaudio mcp` serves the same operations as tools.
+`npx maruaudio mcp install` registers Maru's hosted connector with the agent, for the
 user's Maru account (projects, builds, community modules, generation; sign-in
-on first use); `--local` registers `maru mcp` for this checkout and `--both`
+on first use); `--local` registers `npx maruaudio mcp` for this checkout and `--both`
 registers both. It changes the agent's configuration; use existing setup
 authorization or ask before changing it.
 Preserve a working connection. Verify that the running client can discover the
@@ -114,10 +120,10 @@ For a new local module, use the brief's musical role, formats and destination,
 as `create-module` describes. For an open brief, invite consequential sound and
 design choices with a recommendation and a "choose for me" option; reuse a
 clear brief or delegated judgment without another interview. Inspect
-`maru init --help` and use the bundled scaffolder:
+`npx maruaudio init --help` and use the bundled scaffolder:
 
 ```sh
-maru init my-effect --kind processor-effect --local --install
+npx maruaudio init my-effect --kind processor-effect --local --install
 # For a MIDI instrument: --kind processor-instrument
 ```
 
@@ -140,7 +146,7 @@ The project's README becomes the module's public About page when it is
 published. Keep it for players and put development notes in `DEVELOPMENT.md`.
 
 Choose guidance by the user's goal; read only what the task needs using
-`maru guide read <name...>`:
+`npx --no-install maruaudio guide read <name...>`:
 
 | Goal                                                                                             | Guidance                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -153,10 +159,10 @@ Choose guidance by the user's goal; read only what the task needs using
 | Generate audio or transcribe a recording                                                         | `generation-and-transcription`                                                                                                                                                                                                                                                                                                                                                               |
 | Build firmware or a MIDI-controller app for a music device                                       | `build-for-hardware`; discover matching installed guides and exact device/target capabilities                                                                                                                                                                                                                                                                                                |
 | List firmware you wrote for a music device                                                       | `build-for-hardware` and the [Community firmware guide](https://maru.audio/docs/community-firmware)                                                                                                                                                                                                                                                                                          |
-| List my plugin on the Maru marketplace (built with JUCE, iPlug2, DPF, nih-plug or anything else) | The `list-on-marketplace` task: `maru marketplace whoami`, `project`, `draft`, `media`, `release`, `offer`, `submit`, `status`. Confirm the name, price and licence with the user before submitting; no Maru build                                                                                                                                                                           |
-| The same plugin from a public GitHub repository and its releases                                 | `repository-listing`: `maru listing init`, `check`, `publish`, `status`. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens                                                                                                                                                                                                               |
-| List a plugin already built with another framework (JUCE, iPlug2, binaries on GitHub releases)   | `repository-listing`: `maru listing init`, `check`, `publish`, `status`; no Maru build. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens                                                                                                                                                                                                |
-| Publish this plugin on Maru (a NIH-plug, DPF, JUCE or other project that isn't a Maru module)    | `publish-external-plugin`: run `maru publish` in the project; it detects the framework and offers the three routes. `--route project` uploads, detects and builds after the maker confirms recipe and platform; then `maru build status <id> --wait-seconds 45`, `maru release check`, `maru release publish`. Each failure ends with a code in brackets; the guide says what to do for each |
+| List my plugin on the Maru marketplace (built with JUCE, iPlug2, DPF, nih-plug or anything else) | The `list-on-marketplace` task: `npx --no-install maruaudio marketplace whoami`, `project`, `draft`, `media`, `release`, `offer`, `submit`, `status`. Confirm the name, price and licence with the user before submitting; no Maru build                                                                                                                                                                           |
+| The same plugin from a public GitHub repository and its releases                                 | `repository-listing`: `npx --no-install maruaudio listing init`, `check`, `publish`, `status`. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens                                                                                                                                                                                                               |
+| List a plugin already built with another framework (JUCE, iPlug2, binaries on GitHub releases)   | `repository-listing`: `npx --no-install maruaudio listing init`, `check`, `publish`, `status`; no Maru build. In CI, `MARU_TOKEN` holds a token with only `listings:publish` from https://maru.audio/account/tokens                                                                                                                                                                                                |
+| Publish this plugin on Maru (a NIH-plug, DPF, JUCE or other project that isn't a Maru module)    | `publish-external-plugin`: run `npx --no-install maruaudio publish` in the project; it detects the framework and offers the three routes. `--route project` uploads, detects and builds after the maker confirms recipe and platform; then `npx --no-install maruaudio build status <id> --wait-seconds 45`, `npx --no-install maruaudio release check`, `npx --no-install maruaudio release publish`. Each failure ends with a code in brackets; the guide says what to do for each |
 
 For interface icons, browse [Maru Icons](https://pluginui.com/icons) and use
 the separately published `maru-icons/react` components. They work with Maru
@@ -167,20 +173,20 @@ in `ui-kit-faces`.
 
 Music theory explanations can be answered directly. Musical-data scripts use
 Symbolic without scaffolding an audio module or starting its workbench. Read
-`cli-and-operations` for command conventions and `maru guide list` for other
+`cli-and-operations` for command conventions and `npx --no-install maruaudio guide list` for other
 available guides, including presets and saved state.
 
 - Keep the declaration, parameter contract, Processor, face and presets in
   the generated project. Use its public `maruaudio/*` imports and shared
   controls; the face controls the module rather than implementing its audio.
-- Run the project's typecheck and `maru module check . --fast` while editing.
-  Before calling the work done, run the full `maru module check .`: `--fast`
+- Run the project's typecheck and `npx --no-install maruaudio module check . --fast` while editing.
+  Before calling the work done, run the full `npx --no-install maruaudio module check .`: `--fast`
   skips the publish and browser gates, so it is not a pass. If a gate fails or
   is unavailable, say so and fix it rather than reporting success. After
-  changing the face, run `maru module screenshot .`: it renders the built face
+  changing the face, run `npx --no-install maruaudio module screenshot .`: it renders the built face
   at its declared size and refuses one that is blank, erroring or overflowing,
   and the image shows the user what changed. Inspect
-  `maru module check --help` and `maru plugin build --help` before choosing a
+  `npx --no-install maruaudio module check --help` and `npx --no-install maruaudio plugin build --help` before choosing a
   build target.
 - Distinguish a local package from an online publication. Read
   `build-preview-export` and inspect the installed CLI's help for the commands
@@ -189,13 +195,15 @@ available guides, including presets and saved state.
 - For authorized sharing, reuse the selected account, API origin and CLI profile.
   When local MCP supplies unverified CLI context, use its explicit `--profile`
   for subsequent CLI commands; a named profile does not change plain CLI defaults.
-  Check `maru whoami` and the intended operation's required grants; hosted MCP
+  Check `npx --no-install maruaudio whoami` and the intended operation's required grants; hosted MCP
   sign-in does not establish CLI publication authority. Use supported sign-in
   interfaces only when needed. Never extract connector credentials or promise
   automatic credential transfer between the connector and CLI.
-- Before publishing, resolve first-publication identity through the installed
-  guidance, confirm audience, source visibility and licence from the brief, and
-  inspect the dry-run. Retain the publisher's receipts and resume state. Verify
+- Never invent, ask for or edit a module ID. Creation and copying generate it;
+  publication handles older projects automatically. Before authorized publication,
+  review audience, source visibility and licence from the brief and inspect the
+  signed-in dry run. First publication captures a cover by default; report the
+  final `@handle/slug` and page URL. Retain the publisher's receipts and resume state. Verify
   the returned page and exact account, module/project, revision and Release
   identities it supplies. A dry-run, local install or preview is not sharing;
   retries and updates must continue the same project rather than create a copy.
@@ -206,7 +214,7 @@ available guides, including presets and saved state.
 
 For an existing project, use its current layout and scripts. Hosted Studio
 projects use the `project` operations described by the CLI; do not confuse
-those with local `maru init` scaffolding. Web packaging, native export and
+those with local `npx maruaudio init` scaffolding. Web packaging, native export and
 remote publication are distinct actions; inspect the operation schema before
 running one.
 
@@ -218,7 +226,7 @@ running one.
   audio and MIDI output. A passing build or a silent render is not a finished
   instrument; say what you verified and how.
 - For an effect, check its output level against its input after changing a
-  gain law, drive, mix or preset: `maru module eval --suite levels` prints
+  gain law, drive, mix or preset: `npx --no-install maruaudio module eval --suite levels` prints
   output minus input loudness per preset at several input levels. Narrow it
   while iterating (`--sweep <param>`, `--no-presets`, `--input-lufs -18`,
   `--max-seconds 2`) and add `--tolerance <LU>` to make it fail. It runs only
@@ -229,7 +237,7 @@ running one.
 - Read MCP results for `isError` and operation failures; a successful tool
   transport alone does not establish that a build or server started.
 - When something is missing (sign-in, a component, an extension), report the
-  exact command `maru` printed, such as `maru login`.
+  exact command `maru` printed, such as `npx --no-install maruaudio login`.
   Do not work around it with a different runtime or a hand-written substitute.
 - Use existing authorization for setup and reversible local work. Obtain
   authorization for additional account/configuration changes, paid or hosted
@@ -240,12 +248,18 @@ running one.
 - Finish with: files you changed or created, output files, the settings used
   (including seeds), the checks you ran and their results, and anything that
   was unavailable.
+- Keep a `CHANGELOG.md` in the module folder, newest entry first. Before
+  your final reply in a session that changed the module, add one entry: the
+  date, the agent and model, what changed, the checks and their results, and
+  the tokens and cost the session used. Take the token and cost figures from
+  your host or the user (Claude Code's `/cost`, Codex's `/status`, an API usage
+  report); if none is available, write `not reported`. Never estimate them.
 
 ## Maru feedback
 
 If part of the work was harder than Maru should make it (a missing command or
 tool, an awkward step, a check you could not run), end your reply with the
-line `MARU FEEDBACK: <version>`, where `<version>` is what `maru --version`
+line `MARU FEEDBACK: <version>`, where `<version>` is what `npx --no-install maruaudio --version`
 prints (with only the hosted connector, write `connector` and the server
 version your MCP client shows). Follow it with a short prompt that could be
 used to improve Maru: what you were doing, what was awkward, and the command,

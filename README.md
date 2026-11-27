@@ -19,8 +19,11 @@ The Maru skill connects the agent you already use to this ecosystem. It helps
 the agent choose the right tools, work with your project and check the result.
 Works with Claude Code, Codex, Cursor and other coding agents.
 
-Start at [Connect Maru](https://maru.audio/mcp) to set up the skills and MCP
-servers for your coding agent. For the entry skill alone:
+Start at [Make and publish your first plugin](https://maru.audio/docs/quickstart)
+for the complete Claude Code or Codex workflow. The skills guide your agent;
+the CLI creates, previews, checks and publishes the project. MCP provides
+documentation and account access alongside that workflow. It needs a coding
+agent with a terminal. For the entry skill alone:
 
 ```sh
 npx maruaudio skill install
@@ -36,14 +39,16 @@ Then describe what you want to make:
 
 ### As a plugin
 
-This repository is also a plugin for Claude Code and Codex. One install adds
-the skills and Maru's MCP servers.
+In Claude Code, Claude Desktop, claude.ai, Codex and the ChatGPT desktop app,
+install the Maru plugin from the
+[Maru agent catalog](https://github.com/maru-audio/agents). One install adds
+every skill below and Maru's MCP servers.
 
 **Claude Code**
 
 ```sh
-claude plugin marketplace add maru-audio/maru-skill
-claude plugin install maru@maru-audio
+claude plugin marketplace add maru-audio/agents
+claude plugin install maru@maru
 ```
 
 Then run `/mcp`, choose **maru** and **Authenticate**.
@@ -51,16 +56,15 @@ Then run `/mcp`, choose **maru** and **Authenticate**.
 **Codex**
 
 ```sh
-codex plugin marketplace add maru-audio/maru-skill
-codex plugin add maru@maru-audio
+codex plugin marketplace add maru-audio/agents
+codex plugin add maru@maru
 ```
 
-Then run `codex mcp login maru`. In the ChatGPT desktop app you can also
-install it from **Plugins** once the marketplace is added.
+Then run `codex mcp login maru`.
 
 | Part | What it does |
 | --- | --- |
-| `maru-agent` skill | The same skill as above |
+| `maru-agent` skill | The entry skill: what Maru can make and which focused skill to use |
 | `new-synth` skill | Starts a synth from a template, in your account or in a folder |
 | `find-module` skill | Finds a community module, explains its source and forks it with your OK |
 | `check-build` skill | Reports your plug-in builds and why the latest one failed |
@@ -70,7 +74,9 @@ install it from **Plugins** once the marketplace is added.
 | `verify-module` skill | Checks a module with Maru's release checks, offline renders, a face screenshot and native builds, and reports any gaps |
 | `debug-toolchain` skill | Finds why a command, sign-in, MCP server, build or workbench is not working, and fixes the cause |
 | `build-for-hardware` skill | Guides module device builds, native firmware forks and controller apps using the exact device and installed tools; separates mocks, physical tests, publication and installation |
-| `list-plugin` skill | Chooses with you how a plug-in goes on Maru and confirms its name, price and licence before review |
+| `make-presets` skill | Finds, shapes, previews and saves presets for existing Maru modules from a description, without code |
+| `plugin-accessibility` skill | Reviews a plug-in's parameters and interface for screen readers, keyboard, contrast and scaling |
+| `list-plugin` skill | Publishes through the project's route, preserving your scope and module defaults; checks required marketplace terms and rights |
 | `maru` server | The hosted connector at `https://maru.audio/mcp`: your Maru account, after you sign in to Maru and approve the connection in your browser |
 | `maru-local` server | Runs the published `maruaudio` package from npm on your computer (`npx maruaudio mcp`, pinned to a published release) for the module project in your folder |
 
@@ -87,7 +93,7 @@ an [issue](https://github.com/maru-audio/maru-skill/issues).
 The hosted server talks only to maru.audio, as the account you approve. The
 local server runs Maru's command-line operations on your folder; the ones
 that need your account, such as audio jobs, reach maru.audio after
-`maru login`. See the [privacy policy](https://maru.audio/privacy). If you already added Maru,
+`npx maruaudio login`. See the [privacy policy](https://maru.audio/privacy). If you already added Maru,
 check the existing server scopes before installing another copy. Keep the working
 connection and resolve conflicting entries without exposing or replacing its credentials.
 

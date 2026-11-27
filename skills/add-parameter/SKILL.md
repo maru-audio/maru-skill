@@ -12,11 +12,11 @@ a pattern to copy.
 
 ## Steps
 
-1. **Read the contract first.** `maru guide read parameters-and-schema`, plus
+1. **Read the contract first.** `npx --no-install maruaudio guide read parameters-and-schema`, plus
    `processor-authoring` for a Processor and `ui-kit-faces` if the control will
    be visible. Read the module's current parameters from its schema file
    (usually `src/contract.ts`) rather than from the face. For an official
-   module, `maru module params <slug>` prints its table.
+   module, `npx --no-install maruaudio module params <slug>` prints its table.
 
 2. **Agree on the parameter.** Confirm with the user its label, range,
    default, units and whether it is shown on the face. Pick a `path` that
@@ -35,7 +35,7 @@ a pattern to copy.
    3. **Face** (`src/ui/index.tsx`), only if it is visible: bind a
       `maruaudio/ui` control to the path, such as `SchemaFace` or
       `FaceParamKnob`. Take the range and default from the descriptor; do not
-      repeat them as literals. `maru guide props <Component>` lists a
+      repeat them as literals. `npx --no-install maruaudio guide props <Component>` lists a
       component's props.
    4. **Presets and tapes**: factory presets and `src/qualification.ts`
       derive their defaults from the schema. Change a preset only when it
@@ -43,7 +43,7 @@ a pattern to copy.
       preset path still exists.
 
 4. **Check while editing.** Run the project's typecheck and
-   `maru module check . --fast` after each step. A typecheck catches a
+   `npx --no-install maruaudio module check . --fast` after each step. A typecheck catches a
    missing `setParameter` case in the starter projects.
 
 5. **Verify from outside the edit** with the checks below, then report.
@@ -58,7 +58,7 @@ a pattern to copy.
 - Fix a control's feel with `taper` in the schema, never with a curve in the
   face or a remap in the DSP.
 - `process` allocates nothing, locks nothing and performs no I/O. Read
-  `maru guide read restricted-typescript` before writing DSP.
+  `npx --no-install maruaudio guide read restricted-typescript` before writing DSP.
 - Never change the module `id`. Never hand-edit `build/`, `dist/` or
   `*.generated.ts`.
 - If adding the parameter forces you to copy its range or default into
@@ -70,27 +70,27 @@ a pattern to copy.
 Prove the parameter changes the output, from tools that did not write the
 edit. Report each result, and report any check that could not run as a gap.
 
-1. **Structure.** The full `maru module check .`. Its `parameter-layout` row
+1. **Structure.** The full `npx --no-install maruaudio module check .`. Its `parameter-layout` row
    scores the schema's sections and labels; act on its findings.
 2. **Rendered effect of the new parameter.**
-   - An effect: `maru module eval --suite levels --sweep <path> --no-presets --max-seconds 2`
+   - An effect: `npx --no-install maruaudio module eval --suite levels --sweep <path> --no-presets --max-seconds 2`
      sweeps the new parameter from the defaults and reports output minus input
      loudness, true peak and the transfer slope per step. Add
      `--tolerance <LU>` if the parameter must not change the level.
-   - A Graph module: `maru module eval` before and after reports peak and RMS.
+   - A Graph module: `npx --no-install maruaudio module eval` before and after reports peak and RMS.
    - Any module with a native build: render the standalone driver at two
      values and compare the files, for example
-     `maru app run . --render low.wav --param <path>=<min> --seconds 2` and the
+     `npx --no-install maruaudio app run . --render low.wav --param <path>=<min> --seconds 2` and the
      same with `<max>`; for an instrument add `--notes notes.json` and
      `--expect-audible`.
    A parameter whose renders do not differ is not working, whatever the code
    says.
-3. **Face.** `maru module screenshot .` at the defaults, and with
+3. **Face.** `npx --no-install maruaudio module screenshot .` at the defaults, and with
    `--preset <id>` for a preset that sets the new parameter, to show the face
    draws the value it was given rather than one it keeps itself. Show the user
    the images.
-4. **Formats.** `maru module verify .` for every declared native format when
-   `maru module doctor` reports the native toolchain ready. Name each format
+4. **Formats.** `npx --no-install maruaudio module verify .` for every declared native format when
+   `npx --no-install maruaudio module doctor` reports the native toolchain ready. Name each format
    that was not built.
 
 Over MCP, the local `maru-local` server runs these as `maru_module_check`,
@@ -114,7 +114,7 @@ preset you changed.
 If part of this workflow was harder than Maru should make it (a missing
 command or tool, an awkward step, values you had to copy by hand), end your
 reply with the line `MARU FEEDBACK: <version>`, where `<version>` is what
-`maru --version` prints (with only the hosted connector, write `connector`
+`npx --no-install maruaudio --version` prints (with only the hosted connector, write `connector`
 and the server version your MCP client shows). Follow it with a short prompt
 that could be used to improve Maru: what you were doing, what was awkward, and
 the command, tool or API you wished for. Offer to file it at
